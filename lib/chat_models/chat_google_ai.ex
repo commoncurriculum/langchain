@@ -129,6 +129,7 @@ defmodule LangChain.ChatModels.ChatGoogleAI do
 
   @create_fields [
     :endpoint,
+    :headers,
     :api_version,
     :model,
     :api_key,
