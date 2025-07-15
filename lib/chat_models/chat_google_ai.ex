@@ -854,6 +854,7 @@ defmodule LangChain.ChatModels.ChatGoogleAI do
       model,
       [
         :endpoint,
+        :headers,
         :model,
         :api_version,
         :temperature,
