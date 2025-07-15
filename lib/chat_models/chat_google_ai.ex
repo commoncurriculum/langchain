@@ -73,6 +73,8 @@ defmodule LangChain.ChatModels.ChatGoogleAI do
   @primary_key false
   embedded_schema do
     field :endpoint, :string, default: @default_endpoint
+    # Headers for Req.Request.put_headers/2.
+    field :headers, {:array, :any}, default: []
 
     # The version of the API to use.
     field :api_version, :string, default: @default_api_version
@@ -494,6 +496,7 @@ defmodule LangChain.ChatModels.ChatGoogleAI do
         max_retries: 3,
         retry_delay: fn attempt -> 300 * attempt end
       )
+      |> Req.Request.put_headers(google_ai.headers)
 
     req
     |> Req.post()
@@ -541,6 +544,7 @@ defmodule LangChain.ChatModels.ChatGoogleAI do
       json: for_api(google_ai, messages, tools),
       receive_timeout: google_ai.receive_timeout
     )
+    |> Req.Request.put_headers(google_ai.headers)
     |> Req.Request.put_header("accept-encoding", "utf-8")
     |> Req.post(
       into:
