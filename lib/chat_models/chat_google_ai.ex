@@ -747,12 +747,11 @@ defmodule LangChain.ChatModels.ChatGoogleAI do
         _model,
         %{
           "finishReason" => finish,
-          "content" => %{"parts" => parts, "role" => role},
+          "content" => %{"role" => role} = content,
           "index" => index
         },
         message_type
-      )
-      when is_list(parts) do
+      ) do
     status =
       case message_type do
         MessageDelta ->
@@ -762,6 +761,7 @@ defmodule LangChain.ChatModels.ChatGoogleAI do
           finish_reason_to_status(finish)
       end
 
+    parts = content["parts"] || []
     content = Enum.map_join(parts, & &1["text"])
 
     case message_type.new(%{
